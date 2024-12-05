@@ -9,7 +9,7 @@ public class RoomStatus
     public DateTime ModifiedDate { get; set; }  // MUSTHAVES
     public string ModifiedBy { get; set; }
     public string ModifiedLog { get; set; }
-    public string IsActive  { get; set; }
+    public Boolean IsActive  { get; set; }
     public string Code { get; set; }
     public string Name { get; set; }
     public string Status { get; set; }

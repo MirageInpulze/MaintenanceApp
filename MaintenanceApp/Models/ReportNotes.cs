@@ -9,9 +9,9 @@ public class ReportNotes
     public DateTime ModifiedDate { get; set; }  // MUSTHAVES
     public string ModifiedBy { get; set; }
     public string ModifiedLog { get; set; }
-    public string IsActive  { get; set; }
+    public Boolean IsActive  { get; set; }
     public Guid IncidentReportId { get; set; }
-    public IncidentReport IncidentReport{ get; set; } //Match with IncidentReport ID
+    public IncidentReport? IncidentReport{ get; set; } //Match with IncidentReport ID
     public Guid UserId { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
 }

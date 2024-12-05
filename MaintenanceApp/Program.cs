@@ -6,6 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MaintenanceApp.Conventions;
 using MaintenanceApp.Data;
+using MaintenanceApp.Infrastructure;
+using MaintenanceApp.Models;
+using MaintenanceApp.Repositories;
+using MaintenanceApp.Repositories.Implement;
+using MaintenanceApp.Services;
+using MaintenanceApp.Services.Implement;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,7 +104,12 @@ builder.Services.AddCors(options =>
 
 
 #region RegisterServices
-
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 
 #endregion
@@ -111,6 +123,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region SeedData
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+
+    await SeedData.Initialize(services);
+}
+#endregion
 
 app.UseHttpsRedirection();
 
